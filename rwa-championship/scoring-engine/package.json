@@ -1,0 +1,22 @@
+{
+  "name": "rwa-scoring-engine",
+  "version": "1.0.0",
+  "description": "Adrena RWA Championship scoring engine",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "pm2:start": "pm2 start dist/index.js --name rwa-scoring-engine --restart-delay 5000",
+    "pm2:stop": "pm2 stop rwa-scoring-engine",
+    "pm2:logs": "pm2 logs rwa-scoring-engine"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
