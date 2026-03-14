@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { useRouter } from 'next/navigation'
-import WalletButton from '../components/WalletButton'
+import WalletButton from '@/components/WalletButton'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -120,7 +119,6 @@ export default function LeaderboardPage() {
   const [session, setSession] = useState<SessionInfo | null>(null)
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
-  const router = useRouter()
 
   const config = LEAGUE_CONFIG[league]
 
@@ -221,8 +219,10 @@ export default function LeaderboardPage() {
                   ADRENA × AUTONOM
                 </div>
               </div>
-              <MarketStatus session={session} />
-<WalletButton />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <MarketStatus session={session} />
+                <WalletButton />
+              </div>
             </div>
 
             <h1 style={{
@@ -330,9 +330,7 @@ export default function LeaderboardPage() {
                 <div
                   key={entry.wallet_address}
                   className="row-enter"
-                  onClick={() => router.push(`/trader/${entry.wallet_address}`)}
                   style={{
-                    cursor: 'pointer',
                     animationDelay: `${i * 0.04}s`,
                     display: 'grid',
                     gridTemplateColumns: '48px 1fr 120px 100px 80px 80px 90px',
@@ -388,23 +386,12 @@ export default function LeaderboardPage() {
           </div>
 
           {/* ── FOOTER NOTE ── */}
-          <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-  <p style={{ fontSize: '0.72rem', color: '#444', fontFamily: "'Space Mono', monospace" }}>
-    Scoring powered by Autonom CAN-normalized prices · QRNG raffle draws · Updates every 60s
-  </p>
-  <button onClick={() => router.push('/raffle')} style={{
-    background: 'none',
-    border: '1px solid rgba(176,110,255,0.3)',
-    borderRadius: 6,
-    color: '#B06EFF',
-    fontFamily: "'Space Mono', monospace",
-    fontSize: '0.75rem',
-    padding: '6px 14px',
-    cursor: 'pointer'
-  }}>
-    🎰 Weekly Raffle →
-  </button>
-</div>
+          <p style={{
+            marginTop: 20, fontSize: '0.72rem', color: '#444',
+            fontFamily: "'Space Mono', monospace", textAlign: 'center'
+          }}>
+            Scoring powered by Autonom CAN-normalized prices · QRNG raffle draws · Updates every 60s
+          </p>
         </div>
       </div>
     </>
