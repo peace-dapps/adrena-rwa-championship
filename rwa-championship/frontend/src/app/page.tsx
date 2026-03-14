@@ -122,23 +122,7 @@ export default function Page() {
                   </span>
                 </div>
               )}
-              <button
-  onClick={() => {}}
-  style={{
-    background: 'none',
-    border: '1px solid #555',
-    borderRadius: 8,
-    padding: '6px 8px',
-    cursor: 'pointer',
-    color: '#888',
-  }}
->
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="5"/>
-    <line x1="12" y1="1" x2="12" y2="3"/>
-    <line x1="12" y1="21" x2="12" y2="23"/>
-  </svg>
-</button>
+          <ThemeToggle />
               <WalletButton />
             </div>
           </div>
