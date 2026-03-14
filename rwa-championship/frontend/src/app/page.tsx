@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import { useRouter } from 'next/navigation'
 import WalletButton from '../components/WalletButton'
 
 const supabase = createClient(
@@ -119,6 +120,7 @@ export default function LeaderboardPage() {
   const [session, setSession] = useState<SessionInfo | null>(null)
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
+  const router = useRouter()
 
   const config = LEAGUE_CONFIG[league]
 
@@ -328,7 +330,9 @@ export default function LeaderboardPage() {
                 <div
                   key={entry.wallet_address}
                   className="row-enter"
+                  onClick={() => router.push(`/trader/${entry.wallet_address}`)}
                   style={{
+                    cursor: 'pointer',
                     animationDelay: `${i * 0.04}s`,
                     display: 'grid',
                     gridTemplateColumns: '48px 1fr 120px 100px 80px 80px 90px',
