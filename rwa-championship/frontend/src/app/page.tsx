@@ -388,12 +388,23 @@ export default function LeaderboardPage() {
           </div>
 
           {/* ── FOOTER NOTE ── */}
-          <p style={{
-            marginTop: 20, fontSize: '0.72rem', color: '#444',
-            fontFamily: "'Space Mono', monospace", textAlign: 'center'
-          }}>
-            Scoring powered by Autonom CAN-normalized prices · QRNG raffle draws · Updates every 60s
-          </p>
+          <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+  <p style={{ fontSize: '0.72rem', color: '#444', fontFamily: "'Space Mono', monospace" }}>
+    Scoring powered by Autonom CAN-normalized prices · QRNG raffle draws · Updates every 60s
+  </p>
+  <button onClick={() => router.push('/raffle')} style={{
+    background: 'none',
+    border: '1px solid rgba(176,110,255,0.3)',
+    borderRadius: 6,
+    color: '#B06EFF',
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '0.75rem',
+    padding: '6px 14px',
+    cursor: 'pointer'
+  }}>
+    🎰 Weekly Raffle →
+  </button>
+</div>
         </div>
       </div>
     </>
