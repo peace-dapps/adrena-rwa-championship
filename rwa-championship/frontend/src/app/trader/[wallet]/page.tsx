@@ -161,7 +161,7 @@ export default function TraderProfile() {
               <div>
                 <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:'1rem',fontWeight:700,marginBottom:12,color:'var(--text-secondary)'}}>RECENT TRADES</h2>
                 <div style={{borderRadius:10,overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'80px 80px 1fr 100px 80px',padding:'10px 16px',background:'var(--bg-card)',fontSize:'0.62px',fontFamily:"'Space Mono',monospace",color:'var(--text-muted)',letterSpacing:'0.08em',fontSize:'0.62rem'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'80px 80px 1fr 100px 80px',padding:'10px 16px',background:'var(--bg-card)',fontFamily:"'Space Mono',monospace",color:'var(--text-muted)',letterSpacing:'0.08em',fontSize:'0.62rem'}}>
                     <span>SYMBOL</span><span>SIDE</span><span>DATE</span><span style={{textAlign:'right'}}>PNL</span><span style={{textAlign:'right'}}>LEV</span>
                   </div>
                   {positions.map((pos,i)=>(
