@@ -177,13 +177,14 @@ export default function Page() {
         {/* TABLE */}
         <div style={{borderRadius:12,overflow:'hidden',border:`1px solid ${cfg.border}`,background:'var(--bg-card)'}}>
           {/* Desktop header */}
-          <div className="dt" style={{gridTemplateColumns:'44px 1fr 110px 95px 70px 70px 80px',padding:'10px 16px',background:cfg.bg,borderBottom:`1px solid ${cfg.border}`,fontSize:'0.6rem',fontFamily:"'Space Mono',monospace",color:'var(--text-muted)',letterSpacing:'0.1em'}}>
+          <div className="dt" style={{gridTemplateColumns:'44px 1fr 110px 95px 70px 70px 80px 36px',padding:'10px 16px',background:cfg.bg,borderBottom:`1px solid ${cfg.border}`,fontSize:'0.6rem',fontFamily:"'Space Mono',monospace",color:'var(--text-muted)',letterSpacing:'0.1em'}}>
             <span>RANK</span><span>TRADER</span>
             <span style={{textAlign:'right'}}>RAR</span>
             <span style={{textAlign:'right'}}>PNL</span>
             <span style={{textAlign:'right'}}>TRADES</span>
             <span style={{textAlign:'right'}}>WIN%</span>
             <span style={{textAlign:'right'}}>PTS</span>
+            <span></span>
           </div>
 
           {loading?(
@@ -195,7 +196,7 @@ export default function Page() {
               style={{animationDelay:`${i*0.03}s`,padding:'0 16px',borderBottom:i<entries.length-1?'1px solid var(--border)':'none',background:i<3?cfg.bg:'transparent'}}>
 
               {/* Desktop row */}
-              <div className="dt" style={{gridTemplateColumns:'44px 1fr 110px 95px 70px 70px 80px',alignItems:'center',padding:'12px 0'}}>
+              <div className="dt" style={{gridTemplateColumns:'44px 1fr 110px 95px 70px 70px 80px 36px',alignItems:'center',padding:'12px 0'}}>
                 <div style={{display:'flex',justifyContent:'center'}}><Badge rank={e.rank??i+1}/></div>
                 <div>
                   <div style={{fontFamily:"'Space Mono',monospace",fontSize:'0.82rem',fontWeight:700,color:'var(--text-primary)'}}>{tw(e.wallet_address)}</div>
@@ -206,6 +207,21 @@ export default function Page() {
                 <div style={{textAlign:'right',fontFamily:"'Space Mono',monospace",fontSize:'0.82rem',color:'var(--text-secondary)'}}>{e.trade_count}</div>
                 <div style={{textAlign:'right',fontFamily:"'Space Mono',monospace",fontSize:'0.82rem',color:'var(--text-secondary)'}}>{(e.win_rate*100).toFixed(0)}%</div>
                 <div style={{textAlign:'right',fontFamily:"'Space Mono',monospace",fontSize:'0.82rem',color:'var(--text-primary)',fontWeight:700}}>{e.championship_points??0}</div>
+                <div style={{display:'flex',justifyContent:'center'}}>
+                  <button
+                    onClick={ev => {
+                      ev.stopPropagation()
+                      const text = `I'm ranked #${e.rank??i+1} in the ${cfg.label} League on Adrena × Autonom RWA Championship with a ${e.rar_score.toFixed(1)}% RAR score. Skill over capital. 🏆\n\nhttps://adrena-rwa-championship.vercel.app`
+                      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank')
+                    }}
+                    style={{background:'none',border:'none',cursor:'pointer',color:'var(--text-muted)',padding:4,borderRadius:4,display:'flex',alignItems:'center',transition:'color 0.15s'}}
+                    title="Share on X"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               {/* Mobile row */}
