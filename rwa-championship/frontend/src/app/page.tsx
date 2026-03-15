@@ -228,6 +228,12 @@ export default function Page() {
           <p style={{fontSize:'0.68rem',color:'var(--text-muted)',fontFamily:"'Space Mono',monospace"}}>
             Autonom CAN prices · QRNG raffles · 60s updates
           </p>
+          <span
+  onClick={() => router.push('/admin')}
+  style={{ cursor: 'pointer', color: 'transparent', userSelect: 'none', fontSize: '0.5rem' }}
+>
+  ·
+</span>
           <div style={{display:'flex',gap:8}}>
             <button className="rbtn" onClick={()=>router.push('/about')} style={{border:'1px solid var(--border)',borderRadius:6,color:'var(--text-secondary)',fontFamily:"'Space Mono',monospace",fontSize:'0.75rem',padding:'6px 14px',background:'none',cursor:'pointer'}}>
               How It Works
