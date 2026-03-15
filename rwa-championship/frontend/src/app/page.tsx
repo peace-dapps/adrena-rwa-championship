@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import WalletButton from '../components/WalletButton'
 import { ThemeToggle } from '../components/ThemeProvider'
+import PriceTicker from '../components/PriceTicker'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -122,7 +123,7 @@ export default function Page() {
                   </span>
                 </div>
               )}
-          <ThemeToggle />
+              <ThemeToggle />
               <WalletButton />
             </div>
           </div>
@@ -152,6 +153,9 @@ export default function Page() {
             </button>
           ))}
         </div>
+
+        {/* PRICE TICKER */}
+        <PriceTicker league={league} />
 
         {/* STATS */}
         {session&&(
@@ -228,12 +232,6 @@ export default function Page() {
           <p style={{fontSize:'0.68rem',color:'var(--text-muted)',fontFamily:"'Space Mono',monospace"}}>
             Autonom CAN prices · QRNG raffles · 60s updates
           </p>
-          <span
-  onClick={() => router.push('/admin')}
-  style={{ cursor: 'pointer', color: 'transparent', userSelect: 'none', fontSize: '0.5rem' }}
->
-  ·
-</span>
           <div style={{display:'flex',gap:8}}>
             <button className="rbtn" onClick={()=>router.push('/about')} style={{border:'1px solid var(--border)',borderRadius:6,color:'var(--text-secondary)',fontFamily:"'Space Mono',monospace",fontSize:'0.75rem',padding:'6px 14px',background:'none',cursor:'pointer'}}>
               How It Works
