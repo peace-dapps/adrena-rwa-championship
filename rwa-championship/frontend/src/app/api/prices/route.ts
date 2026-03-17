@@ -10,18 +10,22 @@ export async function GET(request: Request) {
   try {
     const res = await fetch(
       `${AUTONOM_BASE}/prices/batch?feed_ids=${feedIds}&fresh=true`,
-      {
-        headers: { 'x-api-key': AUTONOM_API_KEY },
-      }
+      { headers: { 'x-api-key': AUTONOM_API_KEY } }
     )
 
+    const text = await res.text()
+
     if (!res.ok) {
-      return NextResponse.json({ error: 'Autonom API error', status: res.status }, { status: 502 })
+      return NextResponse.json({ error: `Autonom error ${res.status}`, body: text }, { status: 502 })
     }
 
-    const data = await res.json()
-    return NextResponse.json(data)
-  } catch (err) {
-    return NextResponse.json({ error: 'Failed to fetch prices' }, { status: 500 })
+    try {
+      const data = JSON.parse(text)
+      return NextResponse.json(data)
+    } catch {
+      return NextResponse.json({ raw: text })
+    }
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
