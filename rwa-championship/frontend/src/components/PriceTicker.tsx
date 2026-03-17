@@ -2,9 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-const AUTONOM_API_KEY = '4A3F51C74E338FE80B0B006A030F33EB'
-const AUTONOM_BASE = 'https://oracle.autonom.cc'
-
 const FEED_IDS: Record<string, number> = {
   AAPL: 1030, TSLA: 1029, NVDA: 1022, MSFT: 1002,
   GOLD: 2056, OIL: 2003, NATGAS: 2025, SILVER: 2069,
@@ -13,11 +10,16 @@ const FEED_IDS: Record<string, number> = {
 const LEAGUE_ASSETS: Record<string, string[]> = {
   equities:    ['AAPL', 'TSLA', 'NVDA', 'MSFT'],
   commodities: ['GOLD', 'OIL', 'SILVER', 'NATGAS'],
-  baskets:     ['GOLD', 'SILVER'], // EV metals not available yet
+  baskets:     ['GOLD', 'SILVER'],
 }
 
 const DISPLAY_NAMES: Record<string, string> = {
   GOLD: 'XAU', NATGAS: 'NATGAS', SILVER: 'XAG', OIL: 'OIL',
+}
+
+const FALLBACK: Record<string, number> = {
+  AAPL: 254.32, TSLA: 397.79, NVDA: 183.13, MSFT: 399.96,
+  GOLD: 5020.37, OIL: 97.20, SILVER: 81.03, NATGAS: 3.02,
 }
 
 interface PriceData {
@@ -26,10 +28,8 @@ interface PriceData {
   change: number
 }
 
-// Fallback prices from Autonom team
-const FALLBACK_PRICES: Record<string, number> = {
-  AAPL: 252.78, TSLA: 395.49, NVDA: 183.13, MSFT: 399.96,
-  GOLD: 5020.37, OIL: 97.20, SILVER: 81.03, NATGAS: 3.02,
+function parseAutonomPrice(raw: number, expo: number): number {
+  return raw * Math.pow(10, expo)
 }
 
 export default function PriceTicker({ league }: { league: string }) {
@@ -42,36 +42,37 @@ export default function PriceTicker({ league }: { league: string }) {
     const feedIds = assets.map(s => FEED_IDS[s]).filter(Boolean).join(',')
 
     try {
-      const res = await fetch(
-        `${AUTONOM_BASE}/prices/batch?feed_ids=${feedIds}&fresh=true`,
-        { headers: { 'x-api-key': AUTONOM_API_KEY } }
-      )
-
+      const res = await fetch(`/api/prices?feed_ids=${feedIds}`)
       if (res.ok) {
         const data = await res.json()
+
+        // Autonom returns { prices: [{ feed_id, price, expo, timestamp }] }
+        const priceMap: Record<number, number> = {}
+        if (data.prices && Array.isArray(data.prices)) {
+          for (const item of data.prices) {
+            if (item.feed_id && item.price !== undefined && item.expo !== undefined) {
+              priceMap[item.feed_id] = parseAutonomPrice(item.price, item.expo)
+            }
+          }
+        }
+
         const updated: PriceData[] = assets.map(symbol => {
           const feedId = FEED_IDS[symbol]
-          const feedData = feedId ? (data[feedId] || data[feedId.toString()]) : null
-          const price = feedData
-            ? parseFloat(feedData.price || feedData.Price || feedData.value || FALLBACK_PRICES[symbol])
-            : FALLBACK_PRICES[symbol] || 100
-
+          const price = priceMap[feedId] ?? FALLBACK[symbol] ?? 100
           const prev = prevPricesRef.current[symbol] || price
           const change = prev > 0 ? ((price - prev) / prev) * 100 : 0
           prevPricesRef.current[symbol] = price
-
           return { symbol, price, change }
         })
+
         setPrices(updated)
         return
       }
     } catch {}
 
-    // Fallback with simulated movement
-    const updated: PriceData[] = assets.map(symbol => {
-      const base = FALLBACK_PRICES[symbol] || 100
-      const jitter = (Math.random() - 0.5) * 0.001
-      const price = base * (1 + jitter)
+    // Fallback
+    const updated = (LEAGUE_ASSETS[league] || []).map(symbol => {
+      const price = FALLBACK[symbol] || 100
       const prev = prevPricesRef.current[symbol] || price
       const change = ((price - prev) / prev) * 100
       prevPricesRef.current[symbol] = price
@@ -112,7 +113,7 @@ export default function PriceTicker({ league }: { league: string }) {
             ) : (
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             )}
-            {Math.abs(p.change).toFixed(2)}%
+            {Math.abs(p.change).toFixed(3)}%
           </span>
         </div>
       ))}
