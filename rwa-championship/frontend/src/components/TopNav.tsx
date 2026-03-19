@@ -33,6 +33,15 @@ const NAV_ITEMS = [
     )
   },
   {
+    label: 'Quests',
+    href: '/quests',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    )
+  },
+  {
     label: 'How It Works',
     href: '/about',
     icon: (
@@ -40,15 +49,6 @@ const NAV_ITEMS = [
         <circle cx="12" cy="12" r="10"/>
         <line x1="12" y1="8" x2="12" y2="12"/>
         <line x1="12" y1="16" x2="12.01" y2="16"/>
-      </svg>
-    )
-  },
-  {
-    label: 'Quests',
-    href: '/quests',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
       </svg>
     )
   },
@@ -63,8 +63,10 @@ export default function TopNav() {
       <style>{`
         .top-nav { display: flex; }
         .top-nav-links { display: flex; }
+        .top-nav-logo { display: flex; }
         @media (max-width: 768px) {
-          .top-nav { display: none !important; }
+          .top-nav-links { display: none !important; }
+          .top-nav-logo { display: none !important; }
         }
       `}</style>
 
@@ -80,17 +82,17 @@ export default function TopNav() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           height: 52, width: '100%',
         }}>
-          {/* Logo */}
-          <button onClick={() => router.push('/')} style={{
+          {/* Logo — hidden on mobile */}
+          <button className="top-nav-logo" onClick={() => router.push('/')} style={{
             background: 'none', border: 'none', cursor: 'pointer',
             fontFamily: "'Space Mono', monospace", fontSize: '0.72rem',
             letterSpacing: '0.1em', color: 'var(--accent-green)', fontWeight: 700,
-            flexShrink: 0,
+            flexShrink: 0, alignItems: 'center',
           }}>
             ADRENA × AUTONOM
           </button>
 
-          {/* Nav links */}
+          {/* Nav links — hidden on mobile */}
           <div className="top-nav-links" style={{ alignItems: 'center', gap: 2 }}>
             {NAV_ITEMS.map(item => {
               const active = pathname === item.href
@@ -111,7 +113,7 @@ export default function TopNav() {
             })}
           </div>
 
-          {/* Right side */}
+          {/* Right side — always visible including mobile */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
             <ThemeToggle />
             <WalletButton />
