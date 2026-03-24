@@ -46,7 +46,7 @@ export default function ReferralPage() {
     setLoading(false)
   }
 
-  const referralLink = wallet ? `${BASE_URL}?ref=${wallet.slice(0, 8)}` : ''
+  const referralLink = wallet ? `${BASE_URL}?ref=${wallet}` : ''
 
   function copyLink() {
     if (!referralLink) return
