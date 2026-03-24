@@ -39,6 +39,7 @@ export default function AdminPage() {
   const [sessions, setSessions] = useState<Session[]>([])
   const [seasons, setSeasons] = useState<Season[]>([])
   const [traders, setTraders] = useState<any[]>([])
+  const [feedback, setFeedback] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState('')
   const [msgType, setMsgType] = useState<'success' | 'error'>('success')
@@ -59,14 +60,16 @@ export default function AdminPage() {
 
   async function loadData() {
     setLoading(true)
-    const [{ data: s }, { data: seas }, { data: t }] = await Promise.all([
+    const [{ data: s }, { data: seas }, { data: t }, { data: f }] = await Promise.all([
       supabase.from('sessions').select('*').order('week_number', { ascending: false }),
       supabase.from('seasons').select('*').order('start_date', { ascending: false }),
       supabase.from('traders').select('*').order('registered_at', { ascending: false }),
+      supabase.from('feedback').select('*').order('submitted_at', { ascending: false }),
     ])
     setSessions(s || [])
     setSeasons(seas || [])
     setTraders(t || [])
+    setFeedback(f || [])
     setLoading(false)
   }
 
@@ -334,6 +337,59 @@ export default function AdminPage() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Feedback */}
+        <div style={{ marginTop: 24 }}>
+          <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: '1rem', marginBottom: 12, color: 'var(--text-secondary)' }}>
+            FEEDBACK ({feedback.length})
+          </h2>
+          {feedback.length === 0 ? (
+            <div style={{ padding: 24, borderRadius: 10, background: 'var(--bg-card)', border: '1px solid var(--border)', textAlign: 'center', color: 'var(--text-muted)', fontFamily: "'Space Mono',monospace", fontSize: '0.8rem' }}>
+              No feedback submitted yet. Share the feedback link with testers.
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {feedback.map((f, i) => (
+                <div key={f.id} style={{ padding: '16px 20px', borderRadius: 10, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+                    <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.75rem', color: 'var(--text-primary)', fontWeight: 700 }}>
+                      {f.wallet_address.slice(0, 8)}...{f.wallet_address.slice(-6)}
+                    </span>
+                    <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                      {new Date(f.submitted_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 10, marginBottom: 12 }}>
+                    {[
+                      { label: 'Wallet Ease', value: f.q1_wallet_ease ? `${f.q1_wallet_ease}/5` : '—' },
+                      { label: 'Trades Correct', value: f.q2_trades_correct || '—' },
+                      { label: 'RAR Fairer', value: f.q3_rar_fairer || '—' },
+                      { label: 'Overall Rating', value: f.q4_overall_rating ? `${f.q4_overall_rating}/5` : '—' },
+                      { label: 'Would Return', value: f.q6_would_return || '—' },
+                    ].map(item => (
+                      <div key={item.label} style={{ padding: '8px 10px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)' }}>
+                        <div style={{ fontSize: '0.55rem', fontFamily: "'Space Mono',monospace", color: 'var(--text-muted)', letterSpacing: '0.08em', marginBottom: 3 }}>{item.label.toUpperCase()}</div>
+                        <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-green)' }}>{item.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {f.q5_improvements && (
+                    <div style={{ padding: '8px 12px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)', marginBottom: 8 }}>
+                      <div style={{ fontSize: '0.55rem', fontFamily: "'Space Mono',monospace", color: 'var(--text-muted)', letterSpacing: '0.08em', marginBottom: 4 }}>IMPROVEMENTS</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: "'Space Mono',monospace" }}>{f.q5_improvements}</div>
+                    </div>
+                  )}
+                  {f.q7_other && (
+                    <div style={{ padding: '8px 12px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)' }}>
+                      <div style={{ fontSize: '0.55rem', fontFamily: "'Space Mono',monospace", color: 'var(--text-muted)', letterSpacing: '0.08em', marginBottom: 4 }}>OTHER FEEDBACK</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: "'Space Mono',monospace" }}>{f.q7_other}</div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
