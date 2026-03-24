@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-import { ThemeToggle } from '../../components/ThemeProvider'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -208,7 +207,6 @@ export default function AdminPage() {
             </button>
             <div style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', letterSpacing: '0.1em', color: 'var(--accent-green)', padding: '2px 8px', border: '1px solid rgba(0,212,170,0.3)', borderRadius: 4 }}>ADMIN</div>
           </div>
-          <ThemeToggle />
         </div>
 
         <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(1.4rem,5vw,2rem)', fontWeight: 800, marginBottom: 4 }}>Competition Control</h1>

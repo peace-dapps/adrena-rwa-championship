@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import WalletButton from '../components/WalletButton'
-import { ThemeToggle } from '../components/ThemeProvider'
 import PriceTicker from '../components/PriceTicker'
 
 const supabase = createClient(
@@ -110,23 +109,6 @@ export default function Page() {
 
         {/* HEADER */}
         <div style={{paddingTop:20,paddingBottom:16}}>
-          <div className="hdr-top" style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10,gap:8,flexWrap:'wrap'}}>
-            <div style={{fontFamily:"'Space Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.12em',color:cfg.color,padding:'3px 8px',border:`1px solid ${cfg.color}40`,borderRadius:3,flexShrink:0}}>
-              ADRENA × AUTONOM
-            </div>
-            <div className="hdr-right" style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap',justifyContent:'flex-end'}}>
-              {session && (
-                <div style={{display:'flex',alignItems:'center',gap:6,padding:'4px 10px',borderRadius:999,background:isOpen?'rgba(0,212,170,0.1)':'rgba(255,80,80,0.1)',border:`1px solid ${isOpen?'rgba(0,212,170,0.3)':'rgba(255,80,80,0.3)'}`}}>
-                  <span style={{width:7,height:7,borderRadius:'50%',background:isOpen?'var(--accent-green)':'#FF5050',display:'inline-block',animation:isOpen?'pulse 2s infinite':'none',flexShrink:0}}/>
-                  <span style={{fontSize:'0.68rem',fontWeight:600,color:isOpen?'var(--accent-green)':'#FF5050',whiteSpace:'nowrap'}}>
-                    {isOpen?`${hrs}h ${mins}m left`:'CLOSED'}
-                  </span>
-                </div>
-              )}
-              <ThemeToggle />
-              <WalletButton />
-            </div>
-          </div>
           <h1 style={{fontFamily:"'Syne',sans-serif",fontSize:'clamp(1.6rem,7vw,3rem)',fontWeight:800,letterSpacing:'-0.02em',lineHeight:1.05,marginBottom:4,color:'var(--text-primary)'}}>
             RWA <span style={{color:cfg.color}}>Championship</span>
           </h1>

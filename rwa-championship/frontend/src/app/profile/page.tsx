@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-import { ThemeToggle } from '../../components/ThemeProvider'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -127,7 +126,6 @@ export default function ProfilePage() {
             </svg>
             Back
           </button>
-          <ThemeToggle />
         </div>
 
         {loading ? (
